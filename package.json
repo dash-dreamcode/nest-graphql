@@ -27,6 +27,7 @@
     "apollo-server-express": "^2.7.0",
     "aws-serverless-express": "^3.3.6",
     "graphql": "^14.4.2",
+    "graphql-tools": "^4.0.5",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "rxjs": "^6.3.3",

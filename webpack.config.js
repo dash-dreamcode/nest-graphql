@@ -5,11 +5,7 @@ var nodeExternals = require('webpack-node-externals');
 module.exports = {
   entry: slsw.lib.entries,
   resolve: {
-    extensions: ['.js', '.json', '.ts', '.tsx'],
-    alias: {
-      cldr$: 'cldrjs',
-      cldr: 'cldrjs/dist/cldr',
-    },
+    extensions: ['.json', '.ts', '.tsx'],
   },
   output: {
     libraryTarget: 'commonjs',

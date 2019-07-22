@@ -1,27 +1,49 @@
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { ParseIntPipe } from '@nestjs/common';
+import {
+  TopicsSearch,
+  SavePortalInput,
+  PortalSettings,
+  Topics as TopicsType,
+} from './GraphQL/graphql';
+import { Topics, Content, portalSettings } from './data';
 
-@Resolver('Cat')
+@Resolver('Portal')
 export class AppResolver {
-  cats = [
-    {
-      id: 1,
-      name: 'Mjau',
-      age: 17,
-    },
-  ];
-
-  @Query("getCats")
-  getCats() {
-    console.log('getCats');
-    return this.cats;
+  @Query('getPortalSettings')
+  getPortalSettings(@Args('portalId') portalId: string): PortalSettings {
+    return portalSettings.find(item => item.id === portalId);
   }
 
-  @Query('cat')
-  async findOneById(
-    @Args('id', ParseIntPipe)
-    id: number,
-  ): Promise<any> {
-    return this.cats.find(c => c.id === id);
+  @Query('getTopics')
+  async getTopics(
+    @Args('search') search: TopicsSearch,
+    @Args('first') first: number,
+    @Args('after') after: string,
+  ): Promise<Array<TopicsType>> {
+    let req: [TopicsType] = [null];
+
+    await Topics.filter(item => {
+      return search.digitalAssetIds.forEach(asset => {
+        if (item.phrase.includes(asset)) {
+          req.push(item);
+        }
+      });
+    });
+    return req;
+  }
+
+  @Query('getContent')
+  getContent() {
+    return Content;
+  }
+
+  @Mutation('savePortal')
+  async savePortal(
+    @Args('portal')
+    portal: SavePortalInput,
+  ) {
+    await portalSettings.push(portal as PortalSettings);
+    return portal;
   }
 }

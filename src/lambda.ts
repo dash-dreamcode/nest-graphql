@@ -28,10 +28,7 @@ async function bootstrapServer(): Promise<Server> {
     );
     nestApp.use(eventContext());
     await nestApp.init();
-
-    expressApp.get('/hello', function (_req, res) {
-      res.send('Hello world!');
-    });
+    
     cachedServer = createServer(expressApp, undefined, binaryMimeTypes);
   }
   return cachedServer;
